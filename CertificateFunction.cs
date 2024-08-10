@@ -35,9 +35,7 @@ namespace CertificateFunction
                 return new NotFoundObjectResult("No certificate found");
             }
 
-            var certificateResult = await _certificateService.GetServerCertificateAsync(url);
-
-            return Ok(certificateResult);
+            return new OkObjectResult(await _certificateService.GetServerCertificateAsync(url));
         }
     }
 }
