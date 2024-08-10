@@ -35,15 +35,9 @@ namespace CertificateFunction
                 return new NotFoundObjectResult("No certificate found");
             }
 
-            return new OkObjectResult(certificate);
-        }
+            var certificateResult = await _certificateService.GetServerCertificateAsync(url);
 
-        [FunctionName("TestFunction")]
-        public IActionResult RunTest(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "test")] HttpRequest req,
-        ILogger log)
-        {
-            return new OkObjectResult("Function is working");
+            return Ok(certificateResult);
         }
     }
 }
