@@ -27,7 +27,9 @@ namespace FunctionCertificate
             if (url is null)
                 return BadRequest();
 
-            return new OkObjectResult(await _certificateService.GetServerCertificateAsync(url));
+            var certificateResult = await _certificateService.GetServerCertificateAsync(url);
+
+            return Ok(certificateResult);
         }
     }
 }
