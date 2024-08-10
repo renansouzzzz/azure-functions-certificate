@@ -30,11 +30,14 @@ namespace CertificateFunction
 
             var certificate = await _certificateService.GetServerCertificateAsync(url);
 
+<<<<<<< HEAD
             if (certificate == null)
             {
                 return new NotFoundObjectResult("No certificate found");
             }
 
+=======
+>>>>>>> parent of 582fe80 (releases)
             return new OkObjectResult(await _certificateService.GetServerCertificateAsync(url));
         }
     }
