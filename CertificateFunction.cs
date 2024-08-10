@@ -4,41 +4,32 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using CertificateFunction.Services;
+using FunctionCertificate.Service;
 
-namespace CertificateFunction
+namespace FunctionCertificate
 {
-    public class CertificateFunction
+    public class CertificateFunction : ControllerBase
     {
-        private readonly ServiceCertificate _certificateService;
+        private readonly CertificateService _certificateService;
 
-        public CertificateFunction(ServiceCertificate certificateService)
+        public CertificateFunction(CertificateService certificateService)
         {
             _certificateService = certificateService;
         }
 
         [FunctionName("GetCertificateFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, nameof(HttpMethods.Get), Route = "certificate/{url}")] HttpRequest req,
-            string url,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "certificate")] HttpRequest req,
             ILogger log)
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                return new BadRequestObjectResult("URL is required");
-            }
+            string url = req.Query["url"];
 
-            var certificate = await _certificateService.GetServerCertificateAsync(url);
+            if (url is null)
+                return BadRequest();
 
-<<<<<<< HEAD
-            if (certificate == null)
-            {
-                return new NotFoundObjectResult("No certificate found");
-            }
+            var certificateResult = await _certificateService.GetServerCertificateAsync(url);
 
-=======
->>>>>>> parent of 582fe80 (releases)
-            return new OkObjectResult(await _certificateService.GetServerCertificateAsync(url));
+            return Ok(certificateResult);
         }
     }
 }
